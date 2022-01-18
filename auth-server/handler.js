@@ -112,7 +112,7 @@ module.exports.getCalendarEvents = async (event) => {
   const access_token = decodeURIComponent(`${event.pathParameters.access_token}`);
   oAuth2Client.setCredentials({ access_token });
   return new Promise((resolve, reject) => {
-    oAuth2Client.getCalendarEvent(code, (err, event) => {
+    oAuth2Client.getEvents(access_token, (err, response) => {
       calendar.events.list(
         {
           calendarId: calendar_id,
@@ -132,17 +132,16 @@ module.exports.getCalendarEvents = async (event) => {
       if (err) {
         return reject(err);
       }
-      return resolve(event);
+      return resolve(response);
     });
   })
-    .then((event) => {
-      // Respond with OAuth token 
+    .then((result) => {
       return {
         statusCode: 200,
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
-        body: JSON.stringify({ events: event.data.items })
+        body: JSON.stringify({ events: result.data.items })
       };
     })
     .catch((err) => {
