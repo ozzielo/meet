@@ -108,32 +108,32 @@ module.exports.getCalendarEvents = async (event) => {
     client_id,
     client_secret,
     redirect_uris[0]
-  );
+  )
   const access_token = decodeURIComponent(`${event.pathParameters.access_token}`);
-  oAuth2Client.setCredentials({ access_token });
+  oAuth2Client.setCredentials({ access_token })
   return new Promise((resolve, reject) => {
-    oAuth2Client.getEvents(access_token, (err, response) => {
-      calendar.events.list(
-        {
-          calendarId: calendar_id,
-          auth: oAuth2Client,
-          timeMin: new Date().toISOString(),
-          singleEvents: true,
-          orderBy: "startTime",
-        },
-        (error, response) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(response);
-          }
+    // oAuth2Client.getEvents(access_token, (err, response) => {
+    calendar.events.list(
+      {
+        calendarId: calendar_id,
+        auth: oAuth2Client,
+        timeMin: new Date().toISOString(),
+        singleEvents: true,
+        orderBy: "startTime",
+      },
+      (error, response) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(response);
         }
-      );
-      if (err) {
-        return reject(err);
       }
-      return resolve(response);
-    });
+    )
+    //   if (err) {
+    //     return reject(err);
+    //   }
+    //   return resolve(response);
+    // });
   })
     .then((result) => {
       return {
