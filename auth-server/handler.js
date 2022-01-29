@@ -135,13 +135,13 @@ module.exports.getCalendarEvents = async (event) => {
     //   return resolve(response);
     // });
   })
-    .then((result) => {
+    .then((response) => {
       return {
         statusCode: 200,
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
-        body: JSON.stringify({ events: result.data.items })
+        body: JSON.stringify({ events: response.data.items })
       };
     })
     .catch((err) => {
